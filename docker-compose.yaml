@@ -12,6 +12,10 @@ services:
     depends_on:
       - redis
       - mongo
+    deploy:
+      restart_policy:
+        condition: on-failure
+
   redis:
     image: redis:latest
     ports:
@@ -19,6 +23,10 @@ services:
     networks:
       - demo
     container_name: redis
+    deploy:
+      restart_policy:
+        condition: on-failure
+
 
   mongo:
     image: mongo:latest
@@ -27,6 +35,11 @@ services:
     networks:
       - demo
     container_name: mongo
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+
 networks:
   demo:
 

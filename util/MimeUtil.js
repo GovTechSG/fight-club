@@ -4,7 +4,6 @@ const peek = require('peek-stream');
 const Promise = require('bluebird');
 
 const fileType = require('file-type');
-const mime = require('mime');
 
 var getFileType = function (file) {
     return new Promise(function (resolve, reject) {

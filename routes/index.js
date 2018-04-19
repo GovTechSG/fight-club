@@ -7,7 +7,6 @@ const isStream = require('is-stream');
 
 const peek = require('peek-stream');
 const fs = require('fs');
-const mime = require('mime');
 const path = require('path');
 
 const _ = require("lodash");

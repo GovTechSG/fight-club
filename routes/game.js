@@ -10,7 +10,6 @@ const uuid = require('uuid/v4');
 
 const peek = require('peek-stream');
 const fs = require('fs');
-const mime = require('mime');
 const path = require('path');
 
 const _ = require("lodash");

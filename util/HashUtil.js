@@ -5,7 +5,6 @@ const Promise = require('bluebird');
 const crypto = require('crypto');
 
 const fileType = require('file-type');
-const mime = require('mime');
 
 var getFileHash = function (file, hash_algo) {
     return new Promise(function (resolve, reject) {

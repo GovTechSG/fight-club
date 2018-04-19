@@ -17,53 +17,85 @@
 <div class="container">
     <div id="content">
         <div id="game_info">
-            <div id="red_team" class="card col-sm">
-                <div class="m-2 card-title">
-                    <h2>Red Team</h2>
-                </div>
-                <div class="card-body">
-                    <div class="m-2 progress" style="height: 30px;">
-                        <div class="progress-bar progress-bar-striped bg-danger progress-bar-animated"
-                             role="progressbar" aria-valuenow="0"
-                             aria-valuemin="0"
-                             aria-valuemax="100"></div>
+            <div class="row">
+                <div id="red_team" class="card col-6">
+                    <div class="m-2 card-title">
+                        <h2>Red Team</h2>
                     </div>
+                    <div class="card-body">
+                        <div class="m-2 progress" style="height: 30px;">
+                            <div id="red_team_hp"
+                                 class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
+                                 role="progressbar"
+                                 aria-valuenow="0"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                            ></div>
+                            <div id="red_team_hp_fill"
+                                 class="progress-bar progress-bar-striped progress-bar-animated bg-danger"
+                                 role="progressbar"
+                                 aria-valuenow="0"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 style="opacity: 0"
+                            ></div>
+                        </div>
 
-                    <button class="m-2 btn btn-danger btn-lg btn-block" id="blue_team_hit" data-team="red">Hit</button>
-                </div>
-            </div>
-            <div id="blue_team" class="card col-sm">
-                <div class="m-2 card-title">
-                    <h2>Blue Team</h2>
-                </div>
-                <div class="card-body">
-                    <div class="m-2 progress" style="height: 30px;">
-                        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar"
-                             aria-valuenow="0"
-                             aria-valuemin="0"
-                             aria-valuemax="100"></div>
+                        <button class="m-2 btn btn-danger btn-lg btn-block" id="blue_team_hit" data-team="red">Hit
+                        </button>
                     </div>
+                </div>
+                <div id="blue_team" class="card col-6">
+                    <div class="m-2 card-title">
+                        <h2>Blue Team</h2>
+                    </div>
+                    <div class="card-body">
+                        <div class="m-2 progress" style="height: 30px;">
+                            <div id="blue_team_hp_fill"
+                                 class="progress-bar progress-bar-striped progress-bar-animated"
+                                 role="progressbar"
+                                 aria-valuenow="0"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                                 style="opacity: 0"
+                            ></div>
+                            <div id="blue_team_hp"
+                                 class="progress-bar progress-bar-striped progress-bar-animated"
+                                 role="progressbar"
+                                 aria-valuenow="0"
+                                 aria-valuemin="0"
+                                 aria-valuemax="100"
+                            ></div>
+                        </div>
 
-                    <button class="m-2 btn btn-primary btn-lg btn-block" id="red_team_hit" data-team="blue">Hit</button>
+                        <button class="m-2 btn btn-primary btn-lg btn-block" id="red_team_hit" data-team="blue">Hit
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+                <div class="card hidden col-12" id="winner">
+                    <div class="m-2 card-title">
+                        <h2 id="winner-title"></h2>
+                    </div>
                 </div>
             </div>
 
 
-            <div class="card hidden" id="winner">
-                <div class="m-2 card-title">
-                    <h2 id="winner-title"></h2>
+            <div class="row">
+                <div id="error" class="card alert alert-danger hidden col-12" role="alert">
                 </div>
             </div>
-        </div>
 
-        <div id="error" class="card alert alert-danger hidden" role="alert">
         </div>
 
 
     </div>
 </div>
 
-
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.5/lodash.min.js" type="text/javascript"></script>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js" type="text/javascript"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" type="text/javascript"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" type="text/javascript"></script>
