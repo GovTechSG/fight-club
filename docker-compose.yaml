@@ -1,0 +1,32 @@
+version: "3"
+services:
+  fight-club:
+    build: ./
+    ports:
+      - 3000:3000
+    networks:
+      - demo
+    container_name: demo
+    environment:
+      NODE_ENV: docker
+    depends_on:
+      - redis
+      - mongo
+  redis:
+    image: redis:latest
+    ports:
+      - 6379
+    networks:
+      - demo
+    container_name: redis
+
+  mongo:
+    image: mongo:latest
+    ports:
+      - 27017
+    networks:
+      - demo
+    container_name: mongo
+networks:
+  demo:
+
