@@ -1,4 +1,4 @@
-var update = function (data) {
+let update = function (data) {
 
     let blue_team_hp = _.get(data, ['blue_team', 'hp']);
     let red_team_hp = _.get(data, ['red_team', 'hp']);
@@ -35,12 +35,20 @@ var update = function (data) {
         .html(_.toString(red_team_starting_hp - red_team_hp) + ' / ' + _.toString(red_team_starting_hp));
 
 
+    $('#blue_team_hp_bar').css('width', _.toString(_.toInteger(blue_team_hp / blue_team_starting_hp * 32)) + '%');
+
+    $('#red_team_hp_bar').css('width', _.toString(_.toInteger(red_team_hp / red_team_starting_hp * 32)) + '%');
+
+
+    let $winner = $('#winner');
+    let $winnerTitle = $winner.find('h2');
+
     if (data.winner) {
-        $('#winner-title').html('Winner: ' + (data.winner === 'red_team' ? 'Red Team' : 'Blue Team'));
-        $('#winner').toggleClass('hidden', false);
+        $winnerTitle.html('Winner: ' + (data.winner === 'red_team' ? 'Red Team' : 'Blue Team'));
+        $winner.toggleClass('hidden', false);
     } else {
-        $('#winner').toggleClass('hidden', true);
-        $('#winner-title').html('');
+        $winner.toggleClass('hidden', true);
+        $winnerTitle.html('');
     }
 };
 
@@ -59,9 +67,14 @@ $(function () {
     socket.on('error', function (err) {
         console.error(err);
 
-        $('#error').toggleClass('hidden', false).html(err.message);
+        let $error = $('#error');
+        let $errorText = $error.find('div.card');
+
+        $errorText.html(err.message);
+        $error.toggleClass('hidden', false);
         setTimeout(function () {
-            $('#error').toggleClass('hidden', true).html('');
+            $error.toggleClass('hidden', true);
+            $errorText.html('');
         }, 5000);
 
 
@@ -72,8 +85,8 @@ $(function () {
     });
 
     $('#blue_team_hit, #red_team_hit').on('click', function () {
-        var $this = $(this);
-        var team = $this.data('team');
+        let $this = $(this);
+        let team = $this.data('team');
 
         socket.emit('hit', {team: team});
     });

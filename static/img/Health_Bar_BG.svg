@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1920px" height="768px" viewBox="0 0 1920 768" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 49.2 (51160) - http://www.bohemiancoding.com/sketch -->
+    <title>Health_Bar_BG</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 160 700.548657 160 800 61 458.125924 61 416.010663 102.924128 59.3879052 102.924128"></polygon>
+        <filter x="-1.7%" y="-9.6%" width="103.4%" height="127.3%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="2.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="4" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.154608243 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <polygon id="path-3" points="1006 160 1706.54866 160 1806 61 1464.12592 61 1422.01066 102.924128 1065.38791 102.924128"></polygon>
+        <filter x="-1.7%" y="-9.6%" width="103.4%" height="127.3%" filterUnits="objectBoundingBox" id="filter-4">
+            <feMorphology radius="2.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="4" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feComposite in="shadowBlurOuter1" in2="SourceAlpha" operator="out" result="shadowBlurOuter1"></feComposite>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.154608243 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Health_Bar_BG" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group-2" transform="translate(57.000000, 277.000000)">
+            <g id="Path-2">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use stroke="#818181" stroke-width="5" fill="#F7F7F7" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <g id="Path-2" transform="translate(1406.000000, 110.500000) scale(-1, 1) translate(-1406.000000, -110.500000) ">
+                <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                <use stroke="#818181" stroke-width="5" fill="#F7F7F7" fill-rule="evenodd" xlink:href="#path-3"></use>
+            </g>
+            <text id="BLUE-TEAM" font-family="GlossAndBloom, Gloss And Bloom" font-size="30" font-weight="normal" letter-spacing="5" fill="#4A90E2">
+                <tspan x="59" y="79">BLUE TEA</tspan>
+                <tspan x="245.55" y="79">M</tspan>
+            </text>
+            <text id="RED-TEAM" font-family="GlossAndBloom, Gloss And Bloom" font-size="30" font-weight="normal" letter-spacing="5" fill="#D0021B">
+                <tspan x="1549.215" y="79">RED TEA</tspan>
+                <tspan x="1722.275" y="79">M</tspan>
+            </text>
+            <g id="Group" transform="translate(830.000000, 0.000000)" fill="#000000" font-family="GlossAndBloom, Gloss And Bloom" font-size="125" font-weight="normal">
+                <text id="V">
+                    <tspan x="0.4375" y="119">V</tspan>
+                </text>
+                <text id="V">
+                    <tspan x="1.4375" y="119">V</tspan>
+                </text>
+                <text id="V">
+                    <tspan x="2.4375" y="119">V</tspan>
+                </text>
+                <text id="S">
+                    <tspan x="46.625" y="183">S</tspan>
+                </text>
+                <text id="S">
+                    <tspan x="47.625" y="183">S</tspan>
+                </text>
+                <text id="S">
+                    <tspan x="48.625" y="183">S</tspan>
+                </text>
+                <text id="S">
+                    <tspan x="49.625" y="183">S</tspan>
+                </text>
+                <text id="S">
+                    <tspan x="50.625" y="183">S</tspan>
+                </text>
+                <text id="S">
+                    <tspan x="51.625" y="183">S</tspan>
+                </text>
+                <text id="V">
+                    <tspan x="4.4375" y="119">V</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

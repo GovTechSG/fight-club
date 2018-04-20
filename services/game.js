@@ -120,7 +120,8 @@ gameService.hit = function (data) {
 
                                 }
 
-                                redisPub.publishAsync('game', JSON.stringify({command: 'update'}));
+                                redisPub.publishAsync('game', JSON.stringify({command: 'update'}))
+                                    .return(null);
                             });
                     })
                     .then(function () {
