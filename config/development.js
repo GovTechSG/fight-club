@@ -8,11 +8,11 @@ var config = {
         uri: 'redis://docker:6379'
     },
     mongodb: {
-        uri: 'mongodb://docker:27017'
+        uri: null,
+        options: null
+        //uri: 'mongodb://docker:27017'
     },
-    game:{
-
-    }
+    game: {}
 };
 
 

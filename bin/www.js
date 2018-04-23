@@ -39,10 +39,15 @@ Promise.props({
         redisSub.on('error', reject);
     }),
     mongodb: new Promise(function (resolve, reject) {
-        mongodb.on('connected', function () {
-            return resolve(mongodb);
-        });
-        mongodb.on('error', reject);
+        if (!_.isNil(mongodb)) {
+            mongodb.on('connected', function () {
+                return resolve(mongodb);
+            });
+            mongodb.on('error', reject);
+        } else {
+            return resolve();
+        }
+
     }),
     game: game
 })
