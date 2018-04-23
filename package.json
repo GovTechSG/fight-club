@@ -10,6 +10,7 @@
     "body-parser": "^1.18.2",
     "compression": "^1.7.2",
     "config": "1.30.0",
+    "cookie": "latest",
     "cookie-parser": "^1.4.3",
     "cors": "^2.8.4",
     "csurf": "^1.9.0",
@@ -19,6 +20,7 @@
     "is-stream": "1.1.0",
     "js-yaml": "3.11.0",
     "lodash": "^4.17.5",
+    "moment": "^2.22.1",
     "mongoose": "5.0.14",
     "morgan": "^1.9.0",
     "multer": "^1.3.0",
@@ -28,9 +30,8 @@
     "serve-static": "latest",
     "socket.io": "2.1.0",
     "timeout": "^0.2.1",
-    "uuid": "3.2.1",
+    "uuid": "^3.2.1",
     "winston": "2.4.1",
-    "winston-syslog": "2.0.0",
-    "cookie": "latest"
+    "winston-syslog": "2.0.0"
   }
 }

@@ -1,9 +1,10 @@
 const _ = require('lodash');
+const moment = require('moment');
 const Promise = require('bluebird');
 const redis = require('./redis.js');
 const redisPub = require('./redis_publisher.js');
 const redisSub = require('./redis_subscriber.js');
-const mongodb = require('./mongodb.js');
+// const mongodb = require('./mongodb.js');
 const io = require('./io.js');
 const EventEmitter = require('events');
 const config = require('config');
@@ -105,22 +106,33 @@ gameService.hit = function (data) {
                                 gameService.emit('hit', _.merge({team: team}, game));
                                 gameService.emit('update', game);
 
+                                let hitsPromise = Promise.resolve();
                                 if (!_.isEmpty(_.get(game, 'winner'))) {
-                                    Promise.props({
+                                    hitsPromise = Promise.props({
                                         red_team_hits: redis.lrangeAsync('red_team_hits', 0, -1),
                                         blue_team_hits: redis.lrangeAsync('blue_team_hits', 0, -1)
                                     })
                                         .then(function (props) {
-                                            var Game = mongodb.model('Game');
-                                            var db_game = new Game(game);
-                                            _.set(db_game, ['red_team', 'hits'], _.map(props.red_team_hits, JSON.parse));
-                                            _.set(db_game, ['blue_team', 'hits'], _.map(props.blue_team_hits, JSON.parse));
-                                            return db_game.save();
+                                            let now = moment();
+                                            let gameHistoryKey = 'game-history:' + now.format('YYYYMMDD-HHmmss');
+                                            var result = _.merge({}, game, {
+                                                red_team: {
+                                                    hits: props.red_team_hits
+                                                },
+                                                blue_team: {
+                                                    hits: props.blue_team_hits
+                                                },
+                                                winner: props.winner
+                                            });
+                                            return redis.setAsync(gameHistoryKey, JSON.stringify(result));
                                         });
 
                                 }
 
-                                redisPub.publishAsync('game', JSON.stringify({command: 'update'}))
+                                return hitsPromise;
+                            })
+                            .then( ()=> {
+                                return redisPub.publishAsync('game', JSON.stringify({command: 'update'}))
                                     .return(null);
                             });
                     })

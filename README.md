@@ -13,3 +13,9 @@ Fight Club is a simple Demo Application to demonstrate containerization and comm
 * Upload and Select pictures for use in-game
 * Timed games
 * Combo meter and combo attacks
+
+# Environment Variables
+- GAME_SERVER_OPTS_SERVER_TYPE: Indicates what server is this. Can be either gamemaster or damagecontroller.
+```$xslt
+GAME_SERVER_OPTS_SERVER_TYPE=gamemaster
+```
