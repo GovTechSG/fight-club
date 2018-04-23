@@ -3,6 +3,9 @@ const _ = require("lodash");
 const game = require('../services/game.js');
 const cookie = require('cookie');
 
+const os = require('os');
+const hostname = os.hostname();
+
 
 module.exports = function (services) {
 
@@ -52,6 +55,7 @@ module.exports = function (services) {
             team: team, client_data: client_data
         })
             .catch(function (err) {
+                _.set(game, 'hostname', hostname);
                 socket.emit('error', err);
             });
     });
@@ -59,6 +63,7 @@ module.exports = function (services) {
     socket.on('newGame', function (data) {
         return game.startNewGame(data)
             .catch(function (err) {
+                _.set(game, 'hostname', hostname);
                 socket.emit('error', err);
             });
     });
@@ -67,9 +72,11 @@ module.exports = function (services) {
     socket.on('refresh', function (data) {
         return game.getGame()
             .then(function (game) {
+                _.set(game, 'hostname', hostname);
                 socket.emit('update', game);
             })
             .catch(function (err) {
+                _.set(game, 'hostname', hostname);
                 socket.emit('error', err);
             });
     });

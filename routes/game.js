@@ -18,7 +18,9 @@ const FileUtil = require('../util/FileUtil');
 
 const getFileType = require('../util/MimeUtil.js');
 const getFileHash = require('../util/HashUtil.js');
+const os = require('os');
 
+const hostname = os.hostname();
 
 var router = express.Router();
 
@@ -30,7 +32,7 @@ router.get('/', function (req, res, next) {
         var poll = _.get(req.query, 'poll');
 
         var updatePromise = null;
-        if (!_.isEmpty(poll) && poll==='1') {
+        if (!_.isEmpty(poll) && poll === '1') {
             updatePromise = new Promise(function (resolve, reject) {
                 try {
                     gameUpdateListener = function (data) {
@@ -57,11 +59,13 @@ router.get('/', function (req, res, next) {
             current: gameService.getGame(),
             update: updatePromise
         }).then(function (props) {
-            if (!_.isNil(props.update)) {
-                return res.jsonp(props.update);
-            } else {
-                return res.jsonp(props.current);
-            }
+
+
+            var game = !_.isNil(props.update) ? res.jsonp(props.update) : res.jsonp(props.current);
+
+            _.set(game, 'hostname', hostname);
+
+            return res.jsonp(game);
 
         });
 
@@ -96,6 +100,8 @@ router.post('/', multer().none(), function (req, res, next) {
 
         return gameService.startNewGame(newGame)
             .then(function (game) {
+                _.set(game, 'hostname', hostname);
+
                 return res.jsonp(game);
             });
     } catch (err) {
@@ -128,7 +134,8 @@ router.post('/hit', multer().none(), function (req, res, next) {
             'referer'
         ]), {
             ip: _.get(req, 'ip'),
-            client_id: _.get(req, 'client_id')
+            client_id: _.get(req, 'client_id'),
+            server_hostname: hostname
         });
 
 
@@ -136,6 +143,7 @@ router.post('/hit', multer().none(), function (req, res, next) {
             team: team, client_data: client_data
         })
             .then(function (game) {
+                _.set(game, 'hostname', hostname);
                 return res.jsonp(game);
             })
     } catch (err) {
