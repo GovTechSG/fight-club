@@ -1,13 +1,12 @@
 FROM node:latest
 
-RUN adduser node root
-
 COPY . /usr/src/app
 
 WORKDIR /usr/src/app
 
-RUN chmod -R 775 ${WORKDIR}
-RUN chown -R node:root ${WORKDIR}
+RUN adduser node root
+RUN chmod -R 775 .
+RUN chown -R node:root .
 
 RUN npm install
 
