@@ -5,7 +5,7 @@ const redis = require('../services/redis');
 const redisPub = require('../services/redis_publisher');
 const redisSub = require('../services/redis_subscriber');
 const logger = require('../services/logger.js');
-// const mongodb = require('../services/mongodb');
+const mongodb = require('../services/mongodb');
 const game = require('../services/game');
 const app = require('../app.js');
 const http = require('http');
@@ -38,12 +38,17 @@ Promise.props({
         });
         redisSub.on('error', reject);
     }),
-    // mongodb: new Promise(function (resolve, reject) {
-    //     mongodb.on('connected', function () {
-    //         return resolve(mongodb);
-    //     });
-    //     mongodb.on('error', reject);
-    // }),
+    mongodb: new Promise(function (resolve, reject) {
+        if (!_.isNil(mongodb)) {
+            mongodb.on('connected', function () {
+                return resolve(mongodb);
+            });
+            mongodb.on('error', reject);
+        } else {
+            return resolve();
+        }
+
+    }),
     game: game
 })
     .then(function (connections) {

@@ -9,6 +9,10 @@ const io = require('./io.js');
 const EventEmitter = require('events');
 const config = require('config');
 
+const os = require('os');
+
+const hostname = os.hostname();
+
 var game_config = config.get('game');
 
 
@@ -99,46 +103,39 @@ gameService.hit = function (data) {
 
                         if (opposingTeamHp <= 0) {
                             _.set(game, 'winner', team + '_team');
-                        }
-
-                        return redis.setAsync('game', JSON.stringify(game))
-                            .then(function () {
-                                gameService.emit('hit', _.merge({team: team}, game));
-                                gameService.emit('update', game);
-
-                                let hitsPromise = Promise.resolve();
-                                if (!_.isEmpty(_.get(game, 'winner'))) {
-                                    hitsPromise = Promise.props({
-                                        red_team_hits: redis.lrangeAsync('red_team_hits', 0, -1),
-                                        blue_team_hits: redis.lrangeAsync('blue_team_hits', 0, -1)
-                                    })
-                                        .then(function (props) {
-                                            let now = moment();
-                                            let gameHistoryKey = 'game-history:' + now.format('YYYYMMDD-HHmmss');
-                                            var result = _.merge({}, game, {
-                                                red_team: {
-                                                    hits: props.red_team_hits
-                                                },
-                                                blue_team: {
-                                                    hits: props.blue_team_hits
-                                                },
-                                                winner: props.winner
-                                            });
-                                            return redis.setAsync(gameHistoryKey, JSON.stringify(result));
-                                        });
-
-                                }
-
-                                return hitsPromise;
+                            return Promise.props({
+                                red_team_hits: redis.lrangeAsync('red_team_hits', 0, -1),
+                                blue_team_hits: redis.lrangeAsync('blue_team_hits', 0, -1)
                             })
-                            .then( ()=> {
-                                return redisPub.publishAsync('game', JSON.stringify({command: 'update'}))
-                                    .return(null);
-                            });
+                                .then(function (props) {
+                                    let red_team_hits = _.map(props.red_team_hits, JSON.parse);
+                                    let blue_team_hits = _.map(props.blue_team_hits, JSON.parse);
+
+                                    _.set(game, ['red_team', 'hits'], red_team_hits);
+                                    _.set(game, ['blue_team', 'hits'], blue_team_hits);
+
+                                    if (!_.isNil(mongodb)){
+                                        var Game = mongodb.model('Game');
+                                        var db_game = new Game(game);
+                                        _.set(db_game, ['red_team', 'hits'], _.map(props.red_team_hits, JSON.parse));
+                                        _.set(db_game, ['blue_team', 'hits'], _.map(props.blue_team_hits, JSON.parse));
+                                        return db_game.save();
+                                    }else{
+                                        return redis.lpushAsync('games', JSON.stringify(game))
+                                    }
+                                });
+                        }
                     })
                     .then(function () {
-                        return game;
-                    });
+                        return redis.setAsync('game', JSON.stringify(game))
+                    })
+                    .then(function () {
+                        gameService.emit('hit', _.merge({team: team}, game));
+                        gameService.emit('update', game);
+                        return redisPub.publishAsync('game', JSON.stringify({command: 'update'}))
+                            .return(null);
+                    })
+                    .return(game);
             })
     } catch (err) {
         return Promise.reject(err);
@@ -156,6 +153,7 @@ redisSub.on('message', function (channel, message) {
         if (message.command === 'update') {
             return gameService.getGame()
                 .then(function (game) {
+                    _.set(game, 'hostname', hostname);
                     io.emit('update', game);
                 });
         }

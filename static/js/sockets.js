@@ -35,9 +35,11 @@ let update = function (data) {
         .html(_.toString(red_team_starting_hp - red_team_hp) + ' / ' + _.toString(red_team_starting_hp));
 
 
-    $('#blue_team_hp_bar').css('width', _.toString(_.toInteger(blue_team_hp / blue_team_starting_hp * 32)) + '%');
+    let blue_team_hp_bar_percentage = _.toString((blue_team_hp / blue_team_starting_hp * 100)) + '%';
+    $('#blue_team_hp_bar').css('clip-path', 'polygon(0 0, 0 100%, ' + blue_team_hp_bar_percentage + ' 100%, ' + blue_team_hp_bar_percentage + ' 0)');
 
-    $('#red_team_hp_bar').css('width', _.toString(_.toInteger(red_team_hp / red_team_starting_hp * 32)) + '%');
+    let red_team_hp_bar_percentage = _.toString((red_team_starting_hp - red_team_hp / red_team_starting_hp * 100)) + '%';
+    $('#red_team_hp_bar').css('clip-path', 'polygon(100% 100%, ' + red_team_hp_bar_percentage + ' 100%, ' + red_team_hp_bar_percentage + ' 0%, 100% 0)');
 
 
     let $winner = $('#winner');
@@ -46,10 +48,38 @@ let update = function (data) {
     if (data.winner) {
         $winnerTitle.html('Winner: ' + (data.winner === 'red_team' ? 'Red Team' : 'Blue Team'));
         $winner.toggleClass('hidden', false);
+
+
+
+        let red_team_hits_by_player = _.reduce(red_team_hits, function (result, hit) {
+            var client_id = result.client_id;
+            _.set(result, client_id, _.get(result, client_id, 0) + 1);
+            return result;
+        }, {});
+        _.set(game, ['red_team', 'hits_by_player'], red_team_hits_by_player);
+
+        let blue_team_hits_by_player = _.reduce(blue_team_hits, function (result, hit) {
+            var client_id = result.client_id;
+            _.set(result, client_id, _.get(result, client_id, 0) + 1);
+            return result;
+        }, {});
+        _.set(game, ['blue_team', 'hits_by_player'], blue_team_hits_by_player);
+
+
+        var red_team_players = _.keys(red_team_hits_by_player);
+        var blue_team_players = _.keys(blue_team_hits_by_player);
+
+        var traitors = _.intersection(red_team_players, blue_team_players);
+
+        _.set(game, 'traitors', traitors);
+
+
     } else {
         $winner.toggleClass('hidden', true);
         $winnerTitle.html('');
     }
+
+    $('#info').html('Server: ' + data.hostname);
 };
 
 
