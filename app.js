@@ -1,4 +1,5 @@
 const config = require('config');
+const path = require('path');
 const logger = require('./services/logger.js');
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -10,7 +11,7 @@ const csurf = require("csurf");
 const _ = require("lodash");
 const morgan = require('morgan');
 const compression = require("compression");
-const serveStatic = require('serve-static');
+const favicon = require('serve-favicon');
 
 
 var app = express();
@@ -53,10 +54,8 @@ app.use(cors(cors_config));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-
+app.use(favicon(path.join(__dirname, 'favicon.ico')));
 app.use('/', routes);
-
-app.use(serveStatic('static', {'index': ['index.html', 'index.htm']}));
 
 app.use(function (request, response, next) {
     var error = new Error("Not Found");

@@ -32,9 +32,17 @@ router.use(function (req, res, next) {
     return next();
 });
 
-
 router.get('/_ping', function (req, res, next) {
-    return res.jsonp({status: 'OK'});
+    var serverType = process.env.GAME_SERVER_OPTS_SERVER_TYPE;
+    switch(serverType) {
+        case 'damagecontroller': {
+            return res.jsonp({ status: 'OK. I am Damage Controller' });
+            break;
+        }
+        default: {
+            return res.jsonp({ status: 'OK. I am Game Master' });
+        }
+    }
 });
 
 router.get('/random', function (req, res, next) {
@@ -42,7 +50,7 @@ router.get('/random', function (req, res, next) {
     return res.jsonp({random: randomBytes.toString('hex')});
 });
 
-
+router.use('/roleTest', require('./roleTest.js'));
 router.use('/game', require('./game.js'));
 router.use('/pictures', require('./pictures.js'));
 

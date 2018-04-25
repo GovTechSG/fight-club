@@ -1,3 +1,5 @@
+"use strict"
+
 const express = require('express');
 const crypto = require("crypto");
 const multer = require("multer");
@@ -15,6 +17,7 @@ const path = require('path');
 const _ = require("lodash");
 
 const FileUtil = require('../util/FileUtil');
+const ServerUtil = require('../util/ServerUtil');
 
 const getFileType = require('../util/MimeUtil.js');
 const getFileHash = require('../util/HashUtil.js');
@@ -24,7 +27,7 @@ const hostname = os.hostname();
 
 var router = express.Router();
 
-router.get('/', function (req, res, next) {
+router.get('/', ServerUtil.checkServerType('gamemaster'), function (req, res, next) {
     try {
         var game;
         var gameUpdateListener;
@@ -75,8 +78,7 @@ router.get('/', function (req, res, next) {
     }
 });
 
-
-router.post('/', multer().none(), function (req, res, next) {
+router.post('/', ServerUtil.checkServerType('gamemaster'), multer().none(), function (req, res, next) {
 
     try {
 
@@ -109,8 +111,7 @@ router.post('/', multer().none(), function (req, res, next) {
     }
 });
 
-
-router.post('/hit', multer().none(), function (req, res, next) {
+router.post('/hit', ServerUtil.checkServerType('damagecontroller'),  multer().none(), function (req, res, next) {
     try {
 
         var team = _.get(req.body, 'team');
