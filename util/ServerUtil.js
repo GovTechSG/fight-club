@@ -9,7 +9,7 @@ serverUtil.checkServerType = function(server) {
         var types = serverTypes.split(',');
         var isValidServer = false;
         _.each(types, function(thisType) {
-            if (_serverType = thisType) {
+            if (_serverType === thisType) {
                 isValidServer = true;
             }
         });
