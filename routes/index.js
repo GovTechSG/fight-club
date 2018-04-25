@@ -34,15 +34,7 @@ router.use(function (req, res, next) {
 
 router.get('/_ping', function (req, res, next) {
     var serverType = process.env.GAME_SERVER_OPTS_SERVER_TYPE;
-    switch(serverType) {
-        case 'damagecontroller': {
-            return res.jsonp({ status: 'OK. I am Damage Controller' });
-            break;
-        }
-        default: {
-            return res.jsonp({ status: 'OK. I am Game Master' });
-        }
-    }
+    return res.jsonp({ status: 'OK. I am ' + serverType });
 });
 
 router.get('/random', function (req, res, next) {
