@@ -106,20 +106,7 @@ function start_server() {
             var bind_address = _.isString(port) ? 'Pipe ' : 'Port ' + _.toString(port);
             logger.info('Listening on ' + bind_address);
             var serverType = process.env.GAME_SERVER_OPTS_SERVER_TYPE;
-            switch(serverType) {
-                case 'damagecontroller': {
-                    logger.info('Server is a Damage Controller.');
-                    break;
-                }
-                case 'gamemaster': {
-                    logger.info('Server is a Game Master.');
-                    break;
-                }
-                default: {
-                    logger.info('Unknown server type. Defaulting to Game Master');
-                    break;
-                }
-            }
+            logger.info('Server is a ' + serverType);
             return resolve(server);
         });
 

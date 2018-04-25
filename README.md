@@ -15,7 +15,7 @@ Fight Club is a simple Demo Application to demonstrate containerization and comm
 * Combo meter and combo attacks
 
 # Environment Variables
-- GAME_SERVER_OPTS_SERVER_TYPE: Indicates what server is this. Can be either gamemaster or damagecontroller.
+- GAME_SERVER_OPTS_SERVER_TYPE: Indicates what role(s) this server is. Can be either gamemaster or damagecontroller or both (delimited by ',').
 ```$xslt
-GAME_SERVER_OPTS_SERVER_TYPE=gamemaster
+GAME_SERVER_OPTS_SERVER_TYPE=gamemaster,damagecontroller
 ```

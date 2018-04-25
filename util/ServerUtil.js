@@ -1,10 +1,20 @@
+var _ = require('lodash');
+
 var serverUtil = {};
 
-let serverType = process.env.GAME_SERVER_OPTS_SERVER_TYPE;
+let serverTypes = process.env.GAME_SERVER_OPTS_SERVER_TYPE;
 serverUtil.checkServerType = function(server) {
     let _serverType = server;
     return function (req, res, next) {
-        if (serverType === _serverType) {
+        var types = serverTypes.split(',');
+        var isValidServer = false;
+        _.each(types, function(thisType) {
+            if (_serverType = thisType) {
+                isValidServer = true;
+            }
+        });
+
+        if (isValidServer) {
             return next();
         }
 
