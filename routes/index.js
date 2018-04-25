@@ -33,9 +33,9 @@ router.use(function (req, res, next) {
 });
 
 
-// router.get('/', function (req, res, next) {
-//     return res.jsonp({status: 'OK'});
-// });
+router.get('/_ping', function (req, res, next) {
+    return res.jsonp({status: 'OK'});
+});
 
 router.get('/random', function (req, res, next) {
     var randomBytes = Buffer.from(crypto.randomBytes(1024));
