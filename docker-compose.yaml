@@ -9,6 +9,11 @@ services:
     container_name: demo
     environment:
       NODE_ENV: docker
+      GAME_SERVER_OPTS_SERVER_TYPE: gamemaster,damagecontroller
+      GAME_DAMAGE_CONTROLLER_PROTOCOL: http
+      GAME_DAMAGE_CONTROLLER_HOST: localhost
+      GAME_DAMAGE_CONTROLLER_PORT: 4000,
+      SERVER_PORT: 3000
     depends_on:
       - redis
       - mongo

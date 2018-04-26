@@ -68,7 +68,7 @@ function start_server() {
     return new Promise(function (resolve, reject) {
         var tls_config = config.has('tls') ? config.get('tls') : undefined;
 
-        var port = _.toInteger(config.get('port'));
+        var port = process.env.SERVER_PORT ? _.toInteger(process.env.SERVER_PORT) : _.toInteger(config.get('port'));
 
 
         var server;

@@ -19,3 +19,21 @@ Fight Club is a simple Demo Application to demonstrate containerization and comm
 ```$xslt
 GAME_SERVER_OPTS_SERVER_TYPE=gamemaster,damagecontroller
 ```
+There are also a few environment variables ONLY used by Game Master type servers to communicate with Damage Controller type servers.
+* GAME_DAMAGE_CONTROLLER_PROTOCOL: The protocol used by the Damage Controller server.
+* GAME_DAMAGE_CONTROLLER_HOST: Host URI of Damage Controller server.
+* GAME_DAMAGE_CONTROLLER_PORT: Port of Damage Controller server.
+
+Example (http://damagecontroller.domain.com:3000):
+```$xslt
+GAME_DAMAGE_CONTROLLER_PROTOCOL=http
+GAME_DAMAGE_CONTROLLER_HOST=damagecontroller.domain.com
+GAME_DAMAGE_CONTROLLER_PORT=3000
+```
+
+- SERVER_PORT: Indicates what port should this server be listening at.
+
+Example:
+```$xslt
+SERVER_PORT=3000
+```

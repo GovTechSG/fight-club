@@ -2,6 +2,7 @@ const Promise = require('bluebird');
 const _ = require("lodash");
 const game = require('../services/game.js');
 const cookie = require('cookie');
+const superagent = require('superagent');
 
 const os = require('os');
 const hostname = os.hostname();
@@ -17,48 +18,67 @@ module.exports = function (services) {
     var mongodb = _.get(services, 'mongodb');
     var game = _.get(services, 'game');
 
-    var hitHandler = function (data) {
+    // var hitHandler = function (data) {
+    //
+    //     var team = _.get(data, 'team');
+    //
+    //     var req = _.get(socket, 'request');
+    //
+    //     var client_ip = _.get(socket, 'conn.remoteAddress');
+    //     var xForwardedForHeader = _.get(req.headers, 'x-forwarded-for');
+    //     if (!_.isEmpty(xForwardedForHeader)) {
+    //         client_ip = xForwardedForHeader.split(',')[0];
+    //     }
+    //
+    //
+    //     var cookieHeader = _.get(req.headers, 'cookie');
+    //     var client_id = null;
+    //     if (!_.isEmpty(cookieHeader)) {
+    //         cookieHeader = cookie.parse(cookieHeader);
+    //         client_id = _.get(cookieHeader, 'id');
+    //     }
+    //
+    //     var client_data = _.merge({}, _.pick(req.headers, [
+    //         'forwarded',
+    //         'x-forwarded-for',
+    //         'x-forwarded-host',
+    //         'x-forwarded-proto',
+    //         'via',
+    //         'user-agent',
+    //         'referer'
+    //     ]), {
+    //         ip: client_ip,
+    //         client_id: client_id
+    //     });
+    //
+    //     console.log(client_data);
+    //
+    //     return game.hit({
+    //         team: team, client_data: client_data
+    //     })
+    //         .catch(function (err) {
+    //             _.set(game, 'hostname', hostname);
+    //             socket.emit('error', err);
+    //         });
+    // };
 
-        var team = _.get(data, 'team');
+    var attackHandler = function (data) {
 
-        var req = _.get(socket, 'request');
+        return new Promise(function(resolve, reject) {
+            var reqUrl = process.env.GAME_DAMAGE_CONTROLLER_PROTOCOL + "://" + process.env.GAME_DAMAGE_CONTROLLER_HOST + ":" + process.env.GAME_DAMAGE_CONTROLLER_PORT;
+            reqUrl += '/game/hit';
+            superagent.post(reqUrl)
+                .send(data)
+                .then(function(result) {
+                    return Promise.resolve(result.body);
+                })
+                .catch(function(err) {
+                    _.set(game, 'hostname', hostname);
+                    socket.emit('error', err);
+                    return Promise.reject(err);
+                });
 
-        var client_ip = _.get(socket, 'conn.remoteAddress');
-        var xForwardedForHeader = _.get(req.headers, 'x-forwarded-for');
-        if (!_.isEmpty(xForwardedForHeader)) {
-            client_ip = xForwardedForHeader.split(',')[0];
-        }
-
-
-        var cookieHeader = _.get(req.headers, 'cookie');
-        var client_id = null;
-        if (!_.isEmpty(cookieHeader)) {
-            cookieHeader = cookie.parse(cookieHeader);
-            client_id = _.get(cookieHeader, 'id');
-        }
-
-        var client_data = _.merge({}, _.pick(req.headers, [
-            'forwarded',
-            'x-forwarded-for',
-            'x-forwarded-host',
-            'x-forwarded-proto',
-            'via',
-            'user-agent',
-            'referer'
-        ]), {
-            ip: client_ip,
-            client_id: client_id
         });
-
-        console.log(client_data);
-
-        return game.hit({
-            team: team, client_data: client_data
-        })
-            .catch(function (err) {
-                _.set(game, 'hostname', hostname);
-                socket.emit('error', err);
-            });
     };
 
     var newGameHandler = function (data) {
@@ -81,13 +101,14 @@ module.exports = function (services) {
             });
     };
 
-    if (ServerUtil.checkServerType('damagecontroller')) {
-        socket.on('hit', hitHandler);
-    }
-    else if (ServerUtil.checkServerType('gamemaster')) {
+    // if (ServerUtil.checkServerType('damagecontroller')) {
+    //     socket.on('hit', hitHandler);
+    // }
+    // else
+    if (ServerUtil.checkServerType('gamemaster')) {
         socket.on('newGame', newGameHandler);
         socket.on('refresh', refreshHandler);
-        socket.on('hit', hitHandler);
+        socket.on('attack', attackHandler);
     }
 
 };

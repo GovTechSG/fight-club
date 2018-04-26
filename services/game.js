@@ -3,11 +3,11 @@ const moment = require('moment');
 const Promise = require('bluebird');
 const redis = require('./redis.js');
 const redisPub = require('./redis_publisher.js');
-const redisSub = require('./redis_subscriber.js');
 const mongodb = require('./mongodb.js');
 const io = require('./io.js');
 const EventEmitter = require('events');
 const config = require('config');
+const ServerUtil = require('../util/ServerUtil');
 
 const os = require('os');
 
@@ -143,22 +143,25 @@ gameService.hit = function (data) {
 
 };
 
+//Only Game Master type servers will subscribe to this.
+if (ServerUtil.checkServerType('gamemaster')) {
+    const redisSub = require('./redis_subscriber.js');
+    redisSub.on('message', function (channel, message) {
+        if (channel === 'game') {
+            message = JSON.parse(message);
 
-redisSub.on('message', function (channel, message) {
-    if (channel === 'game') {
-        message = JSON.parse(message);
+            console.log(message);
 
-        console.log(message);
-
-        if (message.command === 'update') {
-            return gameService.getGame()
-                .then(function (game) {
-                    _.set(game, 'hostname', hostname);
-                    io.emit('update', game);
-                });
+            if (message.command === 'update') {
+                return gameService.getGame()
+                    .then(function (game) {
+                        _.set(game, 'hostname', hostname);
+                        io.emit('update', game);
+                    });
+            }
         }
-    }
-});
+    });
+}
 
 
 module.exports = gameService;

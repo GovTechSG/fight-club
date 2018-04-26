@@ -22,6 +22,7 @@ const ServerUtil = require('../util/ServerUtil');
 const getFileType = require('../util/MimeUtil.js');
 const getFileHash = require('../util/HashUtil.js');
 const os = require('os');
+const superagent = require('superagent');
 
 const hostname = os.hostname();
 
@@ -111,7 +112,7 @@ router.post('/', ServerUtil.checkServerTypeHandler('gamemaster'), multer().none(
     }
 });
 
-router.post('/hit', ServerUtil.checkServerTypeHandler('damagecontroller,gamemaster'),  multer().none(), function (req, res, next) {
+router.post('/hit', ServerUtil.checkServerTypeHandler('damagecontroller'),  multer().none(), function (req, res, next) {
     try {
 
         var team = _.get(req.body, 'team');
@@ -146,10 +147,31 @@ router.post('/hit', ServerUtil.checkServerTypeHandler('damagecontroller,gamemast
             .then(function (game) {
                 _.set(game, 'hostname', hostname);
                 return res.jsonp(game);
-            })
+            });
     } catch (err) {
         return next(err);
     }
 });
+
+router.post('/attack', ServerUtil.checkServerTypeHandler('gamemaster'), multer().none(), function (req, res, next) {
+
+    var reqBody = _.get(req, 'body');
+    return new Promise(function (resolve, reject) {
+        var reqUrl = process.env.GAME_DAMAGE_CONTROLLER_PROTOCOL + "://" + process.env.GAME_DAMAGE_CONTROLLER_HOST + ":" + process.env.GAME_DAMAGE_CONTROLLER_PORT;
+        reqUrl += '/game/hit';
+        superagent.post(reqUrl)
+            .send(reqBody)
+            .then(function(response) {
+                var result = response.body;
+                res.jsonp(result);
+                return Promise.resolve(result);
+            })
+            .catch(function(err) {
+                return Promise.reject(err);
+            });
+    })
+
+});
+
 
 module.exports = router;
