@@ -5,7 +5,7 @@ const cookie = require('cookie');
 
 const os = require('os');
 const hostname = os.hostname();
-
+const ServerUtil = require('../util/ServerUtil');
 
 module.exports = function (services) {
 
@@ -17,7 +17,8 @@ module.exports = function (services) {
     var mongodb = _.get(services, 'mongodb');
     var game = _.get(services, 'game');
 
-    socket.on('hit', function (data) {
+    var hitHandler = function (data) {
+
         var team = _.get(data, 'team');
 
         var req = _.get(socket, 'request');
@@ -58,18 +59,17 @@ module.exports = function (services) {
                 _.set(game, 'hostname', hostname);
                 socket.emit('error', err);
             });
-    });
+    };
 
-    socket.on('newGame', function (data) {
+    var newGameHandler = function (data) {
         return game.startNewGame(data)
             .catch(function (err) {
                 _.set(game, 'hostname', hostname);
                 socket.emit('error', err);
             });
-    });
+    };
 
-
-    socket.on('refresh', function (data) {
+    var refreshHandler = function (data) {
         return game.getGame()
             .then(function (game) {
                 _.set(game, 'hostname', hostname);
@@ -79,6 +79,14 @@ module.exports = function (services) {
                 _.set(game, 'hostname', hostname);
                 socket.emit('error', err);
             });
-    });
+    };
+
+    if (ServerUtil.checkServerType('gamemaster')) {
+        socket.on('newGame', newGameHandler);
+        socket.on('refresh', refreshHandler);
+    }
+    if (ServerUtil.checkServerType('damagecontroller')) {
+        socket.on('hit', hitHandler);
+    }
 
 };

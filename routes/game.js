@@ -27,7 +27,7 @@ const hostname = os.hostname();
 
 var router = express.Router();
 
-router.get('/', ServerUtil.checkServerType('gamemaster'), function (req, res, next) {
+router.get('/', ServerUtil.checkServerTypeHandler('gamemaster'), function (req, res, next) {
     try {
         var game;
         var gameUpdateListener;
@@ -78,7 +78,7 @@ router.get('/', ServerUtil.checkServerType('gamemaster'), function (req, res, ne
     }
 });
 
-router.post('/', ServerUtil.checkServerType('gamemaster'), multer().none(), function (req, res, next) {
+router.post('/', ServerUtil.checkServerTypeHandler('gamemaster'), multer().none(), function (req, res, next) {
 
     try {
 
@@ -111,7 +111,7 @@ router.post('/', ServerUtil.checkServerType('gamemaster'), multer().none(), func
     }
 });
 
-router.post('/hit', ServerUtil.checkServerType('damagecontroller'),  multer().none(), function (req, res, next) {
+router.post('/hit', ServerUtil.checkServerTypeHandler('damagecontroller'),  multer().none(), function (req, res, next) {
     try {
 
         var team = _.get(req.body, 'team');
