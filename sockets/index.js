@@ -81,11 +81,12 @@ module.exports = function (services) {
             });
     };
 
-    if (ServerUtil.checkServerType('gamemaster')) {
+    if (ServerUtil.checkServerType('damagecontroller')) {
+        socket.on('hit', hitHandler);
+    }
+    else if (ServerUtil.checkServerType('gamemaster')) {
         socket.on('newGame', newGameHandler);
         socket.on('refresh', refreshHandler);
-    }
-    if (ServerUtil.checkServerType('damagecontroller')) {
         socket.on('hit', hitHandler);
     }
 

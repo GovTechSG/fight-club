@@ -4,28 +4,21 @@ var serverUtil = {};
 
 let serverTypes = process.env.GAME_SERVER_OPTS_SERVER_TYPE;
 
-serverUtil.checkServerType = function(server) {
+serverUtil.checkServerType = function(validServerTypes) {
 
-    let checkServerType = server;
-    var types = serverTypes.split(',');
-    var isValidServer = false;
-    _.each(types, function(thisType) {
-        console.log(checkServerType + ' === ' + thisType);
-        if (checkServerType === thisType) {
-            isValidServer = true;
-        }
-    });
-
-    return isValidServer;
+    let _validServerTypes = validServerTypes.split(',');
+    let thisServerTypes = serverTypes.split(',');
+    let intersect = _.intersection(thisServerTypes, _validServerTypes);
+    return _.size(intersect) > 0;
 
 };
 
-serverUtil.checkServerTypeHandler = function(server) {
+serverUtil.checkServerTypeHandler = function(validServerTypes) {
 
     let instance = this;
-    let checkServerType = server;
+    let _validServerTypes = validServerTypes;
     return function (req, res, next) {
-        let isValidServer = instance.checkServerType(checkServerType);
+        let isValidServer = instance.checkServerType(_validServerTypes);
 
         if (isValidServer) {
             return next();

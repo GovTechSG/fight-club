@@ -64,7 +64,7 @@ router.get('/', ServerUtil.checkServerTypeHandler('gamemaster'), function (req, 
         }).then(function (props) {
 
 
-            var game = !_.isNil(props.update) ? res.jsonp(props.update) : res.jsonp(props.current);
+            var game = !_.isNil(props.update) ? props.update : props.current;
 
             _.set(game, 'hostname', hostname);
 
@@ -111,7 +111,7 @@ router.post('/', ServerUtil.checkServerTypeHandler('gamemaster'), multer().none(
     }
 });
 
-router.post('/hit', ServerUtil.checkServerTypeHandler('damagecontroller'),  multer().none(), function (req, res, next) {
+router.post('/hit', ServerUtil.checkServerTypeHandler('damagecontroller,gamemaster'),  multer().none(), function (req, res, next) {
     try {
 
         var team = _.get(req.body, 'team');
