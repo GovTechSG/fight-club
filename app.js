@@ -47,8 +47,9 @@ app.use(compression(compression_config));
 var helmet_config = config.has('helmet') ? config.get('helmet') : undefined;
 app.use(helmet(helmet_config));
 
-var cors_config = config.has('cors') ? config.get('cors') : undefined;
-app.use(cors(cors_config));
+// var cors_config = config.has('cors') ? config.get('cors') : undefined;
+// app.use(cors(cors_config));
+app.use(cors());
 
 
 app.use(bodyParser.json());
