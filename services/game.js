@@ -44,8 +44,8 @@ gameService.startNewGame = function (data) {
             redis.delAsync('blue_team_hits')
         ])
             .then(function () {
-                gameService.emit('new_game', newGame);
-                gameService.emit('update', newGame);
+                //gameService.emit('new_game', newGame);
+                //gameService.emit('update', newGame);
                 return redisPub.publish('game', JSON.stringify({'command': 'update'}));
             })
             .then(function () {
@@ -130,8 +130,8 @@ gameService.hit = function (data) {
                         return redis.setAsync('game', JSON.stringify(game))
                     })
                     .then(function () {
-                        gameService.emit('hit', _.merge({team: team}, game));
-                        gameService.emit('update', game);
+                        //gameService.emit('hit', _.merge({team: team}, game));
+                        //gameService.emit('update', game);
                         return redisPub.publishAsync('game', JSON.stringify({command: 'update'}))
                             .return(null);
                     })
@@ -155,6 +155,9 @@ if (ServerUtil.checkServerType('gamemaster')) {
             if (message.command === 'update') {
                 return gameService.getGame()
                     .then(function (game) {
+                        // For polling to work. See routes/game.js GET /
+                        gameService.emit('update', game);
+                        // For sockets to work
                         _.set(game, 'hostname', hostname);
                         io.emit('update', game);
                     });
