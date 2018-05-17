@@ -150,7 +150,7 @@ if (ServerUtil.checkServerType('gamemaster')) {
         if (channel === 'game') {
             message = JSON.parse(message);
 
-            console.log(message);
+            console.log(hostname + ':' + moment.now() + ':' + message);
 
             if (message.command === 'update') {
                 return gameService.getGame()
