@@ -148,14 +148,14 @@ if (ServerUtil.checkServerType('gamemaster')) {
     const redisSub = require('./redis_subscriber.js');
     redisSub.on('message', function (channel, message) {
         if (channel === 'game') {
-            message = JSON.parse(message);
 
-            console.log(hostname + ':' + moment.now() + ':' + message);
+            message = JSON.parse(message);
 
             if (message.command === 'update') {
                 return gameService.getGame()
                     .then(function (game) {
                         // For polling to work. See routes/game.js GET /
+                        console.log(moment().format('h:mm:ss') + ':' + message + '   emitting update');
                         gameService.emit('update', game);
                         // For sockets to work
                         _.set(game, 'hostname', hostname);

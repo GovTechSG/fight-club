@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const multer = require("multer");
 const Promise = require('bluebird');
 const isStream = require('is-stream');
+const moment = require('moment');
 
 const gameService = require('../services/game');
 
@@ -28,28 +29,24 @@ const hostname = os.hostname();
 
 var router = express.Router();
 
-router.get('/', ServerUtil.checkServerTypeHandler('gamemaster'), function (req, res, next) {
+router.post('/poll', ServerUtil.checkServerTypeHandler('gamemaster'), function (req, res, next) {
     try {
-        var game;
-        var gameUpdateListener;
+        var poll = _.get(req.body, 'poll');
 
-        var poll = _.get(req.query, 'poll');
-
-        var updatePromise = null;
+        var updatePromise = Promise.resolve(null);
         if (!_.isEmpty(poll) && poll === '1') {
+            let gameUpdateListener;
             updatePromise = new Promise(function (resolve, reject) {
-                try {
-                    gameUpdateListener = function (data) {
-                        return resolve(data);
-                    };
+                gameUpdateListener = function (data) {
+                    console.log(moment().format('h:mm:ss') + ' received update event.');
+                    return resolve(data);
+                };
 
-                    gameService.once('update', gameUpdateListener);
+                gameService.once('update', gameUpdateListener);
 
-                } catch (err) {
-                    return reject(err);
-                }
+                console.log(moment().format('h:mm:ss') + ' registered poll');
             })
-                .timeout(120 * 1000)
+                .timeout(2 * 1000)
                 .finally(function () {
                     gameService.removeListener('update', gameUpdateListener);
                 })
@@ -59,19 +56,24 @@ router.get('/', ServerUtil.checkServerTypeHandler('gamemaster'), function (req, 
         }
 
 
-        return Promise.props({
-            current: gameService.getGame(),
-            update: updatePromise
-        }).then(function (props) {
+        return updatePromise
+            .then(function (updatedGame) {
+                if (_.isNil(updatedGame)) {
+                    return gameService.getGame();
+                }
+                else {
+                    return updatedGame;
+                }
+            })
+            .then(function(game) {
 
+                console.log(moment().format('h:mm:ss') + ' returning results -----------------');
+                console.log(game);
 
-            var game = !_.isNil(props.update) ? props.update : props.current;
+                _.set(game, 'hostname', hostname);
+                return res.jsonp(game);
 
-            _.set(game, 'hostname', hostname);
-
-            return res.jsonp(game);
-
-        });
+            });
 
 
     } catch (err) {
