@@ -21,11 +21,11 @@ var gameService = new EventEmitter();
 gameService.default = {
     red_team: {
         name: _.get(game_config, ['red_team', 'name'], 'Red Team'),
-        starting_hp: _.get(game_config, ['red_team', 'starting_hp'], 100)
+        starting_hp: _.get(game_config, ['red_team', 'starting_hp'], _.toNumber(process.env.STARTING_HP) || 100)
     },
     blue_team: {
         name: _.get(game_config, ['blue_team', 'name'], 'Blue Team'),
-        starting_hp: _.get(game_config, ['blue_team', 'starting_hp'], 100)
+        starting_hp: _.get(game_config, ['blue_team', 'starting_hp'], _.toNumber(process.env.STARTING_HP) || 100)
     }
 };
 

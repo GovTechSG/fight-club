@@ -46,7 +46,9 @@ REDIS_URI=redis://localhost:6379
 REDIS_DB_INDEX=0
 ```
 
+* STARTING_HP: Indicates how much HP at the start.
 * HIT_POINT: Indicates how much points does each hit will incur. ONLY applicable to damage controller.
 ```$xslt
+STARTING_HP=100
 HIT_POINT=1
 ```
