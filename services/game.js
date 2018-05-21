@@ -14,7 +14,7 @@ const os = require('os');
 const hostname = os.hostname();
 
 var game_config = config.get('game');
-const HIT_POINT = parseInt(process.env.HIT_POINT) || 1;
+const HIT_POINT = _.toNumber(process.env.HIT_POINT) || 1;
 
 var gameService = new EventEmitter();
 
