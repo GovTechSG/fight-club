@@ -22,13 +22,13 @@ app.locals.config = config;
 app.locals.logger = logger;
 app.locals.csrfProtection = csurf({cookie: true});
 
-// app.use(morgan('combined', {
-//     stream: {
-//         write: function (message) {
-//             // logger.info(message);
-//         }
-//     }
-// }));
+app.use(morgan('combined', {
+    stream: {
+        write: function (message) {
+            logger.info(message);
+        }
+    }
+}));
 
 var compression_config = config.has('compression') ? config.get('compression') : undefined;
 if (!_.isUndefined(compression_config) && !_.has(compression_config, 'filter')) {

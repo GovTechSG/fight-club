@@ -37,3 +37,16 @@ Example:
 ```$xslt
 SERVER_PORT=3000
 ```
+
+* REDIS_URI: URI of Redis server. Note that Game Master and Damage Controller have to point to same Redis server.
+* REDIS_DB_INDEX: The redis DB index to use.
+Example:
+```$xslt
+REDIS_URI=redis://localhost:6379
+REDIS_DB_INDEX=0
+```
+
+* HIT_POINT: Indicates how much points does each hit will incur. ONLY applicable to damage controller.
+```$xslt
+HIT_POINT=1
+```

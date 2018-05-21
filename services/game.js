@@ -14,7 +14,7 @@ const os = require('os');
 const hostname = os.hostname();
 
 var game_config = config.get('game');
-
+const HIT_POINT = parseInt(process.env.HIT_POINT) || 1;
 
 var gameService = new EventEmitter();
 
@@ -98,7 +98,7 @@ gameService.hit = function (data) {
                     .then(function (hits) {
                         var updatePromises = [];
 
-                        var opposingTeamHp = _.get(game, [opposingTeam + '_team', 'starting_hp']) - hits;
+                        var opposingTeamHp = _.get(game, [opposingTeam + '_team', 'starting_hp']) - (hits * HIT_POINT);
                         _.set(game, [opposingTeam + '_team', 'hp'], opposingTeamHp);
 
                         if (opposingTeamHp <= 0) {

@@ -11,7 +11,7 @@ sudo docker run -d \
     redis:latest
 echo "Redis started!!"
 
-VAR_NODECOUNT=2
+VAR_NODECOUNT=1
 VAR_CURRNODE=1
 while [ $VAR_CURRNODE -le $((VAR_NODECOUNT)) ]
 do
@@ -29,10 +29,10 @@ sudo docker rmi fight-club:latest
 
 sudo docker build -f Dockerfile -t fight-club:latest .
 
-VAR_CURRNODE=1
+VAR_CURRNODE=2
 while [ $VAR_CURRNODE -le $((VAR_NODECOUNT)) ]
 do
-    echo "Starting dc-node$VAR_CURRNODE..."
+    echo "Starting gm-node$VAR_CURRNODE..."
     sudo docker run -d \
             -e "NODE_ENV=localhost" \
             -e "GAME_SERVER_OPTS_SERVER_TYPE=gamemaster" \
@@ -46,12 +46,13 @@ do
             --restart=unless-stopped \
             --name gm-node$VAR_CURRNODE \
             fight-club:latest
-    echo "Starting gm-node$VAR_CURRNODE..."
+    echo "Starting dc-node$VAR_CURRNODE..."
     sudo docker run -d \
             -e "NODE_ENV=localhost" \
             -e "REDIS_URI=redis://lotc-redis:6379" \
             -e "REDIS_DB_INDEX=1" \
             -e "GAME_SERVER_OPTS_SERVER_TYPE=damagecontroller" \
+            -e "HIT_POINT=0.1" \
             --network=lotc-net \
             --network-alias=dc-node$VAR_CURRNODE \
             --restart=unless-stopped \
