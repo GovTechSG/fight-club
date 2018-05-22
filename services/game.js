@@ -26,11 +26,12 @@ gameService.default = {
     blue_team: {
         name: _.get(game_config, ['blue_team', 'name'], 'Blue Team'),
         starting_hp: _.toNumber(process.env.STARTING_HP) || _.get(game_config, ['blue_team', 'starting_hp'], 100)
-    }
+    },
+    started: false
 };
 
 
-gameService.startNewGame = function (data) {
+gameService.newGame = function (data) {
 
     try {
         var newGame = _.cloneDeep(gameService.default);
@@ -54,6 +55,22 @@ gameService.startNewGame = function (data) {
     } catch (err) {
         return Promise.reject(err);
     }
+};
+
+gameService.startGame = function (options) {
+    return gameService.getGame()
+        .then(function (game) {
+
+            var started = _.get(game, 'started', false);
+            if (!started) {
+                _.set(game, 'started', true);
+                return redis.setAsync('game', JSON.stringify(game));
+            }
+            else {
+                return game;
+            }
+
+        });
 };
 
 

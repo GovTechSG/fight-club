@@ -103,7 +103,7 @@ router.post('/', ServerUtil.checkServerTypeHandler('gamemaster'), multer().none(
             _.set(newGame, ['blue_team', 'starting_hp'], _.get(req.body, 'blue_team_hp'));
         }
 
-        return gameService.startNewGame(newGame)
+        return gameService.newGame(newGame)
             .then(function (game) {
                 _.set(game, 'hostname', hostname);
 
@@ -112,6 +112,20 @@ router.post('/', ServerUtil.checkServerTypeHandler('gamemaster'), multer().none(
     } catch (err) {
         return next(err);
     }
+});
+
+router.post('/start', ServerUtil.checkServerTypeHandler('gamemaster'), multer().none(), function (req, res, next) {
+
+    try {
+        var options = {};
+        return gameService.startGame(options)
+            .then(function (game) {
+                return res.jsonp(game);
+            })
+    } catch (err) {
+        return next(err);
+    }
+
 });
 
 router.post('/hit', ServerUtil.checkServerTypeHandler('damagecontroller'),  multer().none(), function (req, res, next) {
