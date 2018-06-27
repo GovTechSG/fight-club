@@ -1,9 +1,12 @@
 #!/usr/bin/env node
 
 const config = require('config');
-const redis = require('../services/redis');
-const redisPub = require('../services/redis_publisher');
-const redisSub = require('../services/redis_subscriber');
+var redis, redisPub, redisSub;
+if (_.get(config.redis, 'enabled', true)) {
+    redis = require('../services/redis');
+    redisPub = require('../services/redis_publisher');
+    redisSub = require('../services/redis_subscriber');
+}
 const logger = require('../services/logger.js');
 const mongodb = require('../services/mongodb');
 const game = require('../services/game');
