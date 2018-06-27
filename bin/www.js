@@ -21,22 +21,37 @@ const io = require('../services/io');
 
 Promise.props({
     redis: new Promise(function (resolve, reject) {
-        redis.on('connect', function () {
-            return resolve(redis);
-        });
-        redis.on('error', reject);
+        if (_.get(config.redis, 'enabled', true)) {
+            redis.on('connect', function () {
+                return resolve(redis);
+            });
+            redis.on('error', reject);
+        }
+        else {
+            return resolve(null);
+        }
     }),
     redisPub: new Promise(function (resolve, reject) {
-        redisPub.on('connect', function () {
-            return resolve(redisPub);
-        });
-        redisPub.on('error', reject);
+        if (_.get(config.redis, 'enabled', true)) {
+            redisPub.on('connect', function () {
+                return resolve(redisPub);
+            });
+            redisPub.on('error', reject);
+        }
+        else {
+            return resolve(null);
+        }
     }),
     redisSub: new Promise(function (resolve, reject) {
-        redisSub.on('connect', function () {
-            return resolve(redisSub);
-        });
-        redisSub.on('error', reject);
+        if (_.get(config.redis, 'enabled', true)) {
+            redisSub.on('connect', function () {
+                return resolve(redisSub);
+            });
+            redisSub.on('error', reject);
+        }
+        else {
+            return resolve(null);
+        }
     }),
     mongodb: new Promise(function (resolve, reject) {
         if (!_.isNil(mongodb)) {
