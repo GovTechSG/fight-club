@@ -18,6 +18,7 @@ const sockets = require('../sockets');
 
 const io = require('../services/io');
 
+console.log('Redis enabled ' + _.get(config, 'redis.enabled'));
 
 Promise.props({
     redis: new Promise(function (resolve, reject) {
