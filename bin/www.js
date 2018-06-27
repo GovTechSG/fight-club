@@ -2,12 +2,9 @@
 
 const config = require('config');
 const _ = require("lodash");
-var redis, redisPub, redisSub;
-if (_.get(config.redis, 'enabled', true)) {
-    redis = require('../services/redis');
-    redisPub = require('../services/redis_publisher');
-    redisSub = require('../services/redis_subscriber');
-}
+const redis = require('../services/redis');
+const redisPub = require('../services/redis_publisher');
+const redisSub = require('../services/redis_subscriber');
 const logger = require('../services/logger.js');
 const mongodb = require('../services/mongodb');
 const game = require('../services/game');
@@ -21,41 +18,24 @@ const sockets = require('../sockets');
 
 const io = require('../services/io');
 
-console.log('Redis enabled ' + _.get(config, 'redis.enabled'));
-
 Promise.props({
     redis: new Promise(function (resolve, reject) {
-        if (_.get(config.redis, 'enabled', true)) {
-            redis.on('connect', function () {
-                return resolve(redis);
-            });
-            redis.on('error', reject);
-        }
-        else {
-            return resolve(null);
-        }
+        redis.on('connect', function () {
+            return resolve(redis);
+        });
+        redis.on('error', reject);
     }),
     redisPub: new Promise(function (resolve, reject) {
-        if (_.get(config.redis, 'enabled', true)) {
-            redisPub.on('connect', function () {
-                return resolve(redisPub);
-            });
-            redisPub.on('error', reject);
-        }
-        else {
-            return resolve(null);
-        }
+        redisPub.on('connect', function () {
+            return resolve(redisPub);
+        });
+        redisPub.on('error', reject);
     }),
     redisSub: new Promise(function (resolve, reject) {
-        if (_.get(config.redis, 'enabled', true)) {
-            redisSub.on('connect', function () {
-                return resolve(redisSub);
-            });
-            redisSub.on('error', reject);
-        }
-        else {
-            return resolve(null);
-        }
+        redisSub.on('connect', function () {
+            return resolve(redisSub);
+        });
+        redisSub.on('error', reject);
     }),
     mongodb: new Promise(function (resolve, reject) {
         if (!_.isNil(mongodb)) {
