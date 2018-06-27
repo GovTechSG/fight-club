@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 
 const config = require('config');
+const _ = require("lodash");
 var redis, redisPub, redisSub;
 if (_.get(config.redis, 'enabled', true)) {
     redis = require('../services/redis');
@@ -15,7 +16,6 @@ const http = require('http');
 const https = require('https');
 const path = require('path');
 const fs = require('fs');
-const _ = require("lodash");
 const Promise = require('bluebird');
 const sockets = require('../sockets');
 
