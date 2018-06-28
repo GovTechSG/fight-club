@@ -79,7 +79,7 @@ gameService.getGame = function () {
         return redis.getAsync('game')
             .then(function (game) {
                 if (_.isEmpty(game)) {
-                    return gameService.startNewGame();
+                    return gameService.newGame();
                 } else {
                     return JSON.parse(game);
                 }
