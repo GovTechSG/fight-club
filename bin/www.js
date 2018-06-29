@@ -17,8 +17,22 @@ const Promise = require('bluebird');
 const sockets = require('../sockets');
 
 const io = require('../services/io');
-var logObject = {"filename":"index.ts","logged_object":{"version":"1.0.0-b49"},"level":"info","message":"mol-internet is starting, with version: 1.0.0-b49","timestamp":"2018-06-27T11:23:00.756Z"};
-console.log(logObject, "TEST");
+
+var recurse = function () {
+    return Promise.delay(2000)
+        .then(function () {
+            var logObject = {
+                "filename": "index.ts",
+                "logged_object": {"version": "1.0.0-b49"},
+                "level": "info",
+                "message": "mol-internet is starting, with version: 1.0.0-b49",
+                "timestamp": "2018-06-27T11:23:00.756Z"
+            };
+            console.log(logObject, "TEST");
+            recurse();
+        });
+};
+recurse();
 
 Promise.props({
     redis: new Promise(function (resolve, reject) {
