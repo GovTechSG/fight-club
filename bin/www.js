@@ -18,17 +18,21 @@ const sockets = require('../sockets');
 
 const io = require('../services/io');
 
+const winston = require('winston');
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transport: [
+        new winston.transports.File({ filename: 'error.log', level: 'error'}),
+        new winston.transports.File({ filename: 'combined.log' })
+    ]
+});
 var recurse = function () {
-    return Promise.delay(2000)
+    return Promise.delay(5000)
         .then(function () {
-            var logObject = {
-                "filename": "index.ts",
-                "logged_object": {"version": "1.0.0-b49"},
-                "level": "info",
-                "message": "mol-internet is starting, with version: 1.0.0-b49",
-                "timestamp": "2018-06-27T11:23:00.756Z"
-            };
-            console.log(logObject, "TEST");
+            logger.log('info', 'This is an info message');
+            logger.log('warning', 'This is a warning message');
+            logger.log('error', 'This is an error message');
             recurse();
         });
 };
