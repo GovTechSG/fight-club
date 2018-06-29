@@ -2,7 +2,7 @@ var config = {
     log: {
         level: 'info'
     },
-    port: 3000,
+    port: 4999,
 
     redis: {
         uri: 'redis://docker:6379'

@@ -28,11 +28,25 @@ _.each(_.get(log_config, 'transports'), function (transport) {
     }
 });
 
-
-var logger = new (winston.Logger)({
+var logger = winston.createLogger({
     level: log_level,
+    format: winston.format.combine(
+        winston.format.label({label: 'Woohoo'}),
+        winston.format.timestamp(),
+        winston.format.json()
+    ),
     transports: transports
 });
 
+// const winston = require('winston');
+// const logger = winston.createLogger({
+//     level: 'info',
+//     format: winston.format.json(),
+//     transport: [
+//         new winston.transports.Console()
+//         // new winston.transports.File({ filename: 'error.log', level: 'error'}),
+//         // new winston.transports.File({ filename: 'combined.log' })
+//     ]
+// });
 
 module.exports = logger;

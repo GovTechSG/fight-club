@@ -5,7 +5,7 @@ const _ = require("lodash");
 const redis = require('../services/redis');
 const redisPub = require('../services/redis_publisher');
 const redisSub = require('../services/redis_subscriber');
-// const logger = require('../services/logger.js');
+const logger = require('../services/logger.js');
 const mongodb = require('../services/mongodb');
 const game = require('../services/game');
 const app = require('../app.js');
@@ -18,21 +18,13 @@ const sockets = require('../sockets');
 
 const io = require('../services/io');
 
-const winston = require('winston');
-const logger = winston.createLogger({
-    level: 'info',
-    format: winston.format.json(),
-    transport: [
-        new winston.transports.File({ filename: 'error.log', level: 'error'}),
-        new winston.transports.File({ filename: 'combined.log' })
-    ]
-});
+logger.log({ txid: 1, level: 'info', message: 'Hello all'});
 var recurse = function () {
     return Promise.delay(5000)
         .then(function () {
-            logger.log('info', 'This is an info message');
-            logger.log('warning', 'This is a warning message');
-            logger.log('error', 'This is an error message');
+            logger.info({txid: 1111, message: 'This is an info message'});
+            logger.warn({txid: 2222, message: 'This is a warning message'});
+            logger.error({txid: 3333, message: 'This is an error message'});
             recurse();
         });
 };
