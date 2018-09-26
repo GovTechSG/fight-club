@@ -18,17 +18,17 @@ const sockets = require('../sockets');
 
 const io = require('../services/io');
 
-logger.log({ txid: 1, level: 'info', message: 'Hello all'});
-var recurse = function () {
-    return Promise.delay(5000)
-        .then(function () {
-            logger.info({txid: 1111, message: 'This is an info.ip message'});
-            logger.warn({txid: 2222, message: 'This is a warning message'});
-            logger.error({txid: 3333, message: 'This is an error message'});
-            recurse();
-        });
-};
-recurse();
+// logger.log({ txid: 1, level: 'info', message: 'Hello all'});
+// var recurse = function () {
+//     return Promise.delay(5000)
+//         .then(function () {
+//             logger.info({txid: 1111, message: 'This is an info.ip message'});
+//             logger.warn({txid: 2222, message: 'This is a warning message'});
+//             logger.error({txid: 3333, message: 'This is an error message'});
+//             recurse();
+//         });
+// };
+// recurse();
 
 Promise.props({
     redis: new Promise(function (resolve, reject) {
