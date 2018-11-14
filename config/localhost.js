@@ -2,7 +2,7 @@ var config = {
     log: {
         level: 'info'
     },
-    port: 3000,
+    port: 5000,
 
     redis: {
         uri: 'redis://localhost:6379',

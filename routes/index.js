@@ -33,6 +33,7 @@ router.use(function (req, res, next) {
 });
 
 router.get('/_ping', function (req, res, next) {
+    console.log(req.headers);
     var serverType = process.env.GAME_SERVER_OPTS_SERVER_TYPE;
     return res.jsonp({ status: 'OK. I am ' + serverType });
 });
